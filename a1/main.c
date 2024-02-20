@@ -7,8 +7,11 @@
 
 int main(int argc, char *argv[]){
     if (argc < 3){
-        fprintf(stderr,"Needs more than two arguments",argv[0]);
+        fprintf(stderr,"Needs more than two arguments\n");
         return 1;
     };
+    const char *pathname = argv[1];
+    const char *pattern = argv[2];
+    search_directory(pathname,pattern);
     return 0;
 }

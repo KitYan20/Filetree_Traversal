@@ -14,7 +14,7 @@ void search_file(const *filename,const char *pattern){
     while (fgets(line,sizeof(line),file)){
         line_number++;
         if (strstr(line,pattern) != NULL){
-            printf("Filename: %s\n Line Number: %d\n line: %s\n", filename, line_number, line);
+            printf("Line Number: %d\nline: %s\n", line_number, line);
         }
     }
     fclose(file);
