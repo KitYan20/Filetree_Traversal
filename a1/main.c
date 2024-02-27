@@ -9,25 +9,33 @@
 #include "directory.h"
 
 int main(int argc, char *argv[]){
-    // if (argc < 3){
-    //     fprintf(stderr,"Needs more than two arguments\n");
-    //     return 1;
-    // }
+    /*
+    Options for -f and -l
+    either have -f with c, h, S and -l -> search all the specified file type with symbolic links
+    have -f with c,h,s and not -l -> search all the specified file type with no symbolic links
+    have no -f and have -l -> search for all regular files and symbolic links
+    have no -f and have no -l -> search for all regular files with no symbolic links
+
+    */
     int opt;
-    char *pathname = NULL;
-    char *suffix = NULL;
-    char *search_string = NULL;
+    //path of directory
+    const char *pathname = NULL;
+    //Get the file type if -f flag is intialized
+    const char *file_type = NULL;
+    //get the search string "s"
+    const char *pattern = NULL;
     int include_links = 0;
+
     while((opt = getopt(argc,argv, "p:f:s:l")) != -1){
         switch(opt){
             case 'p':
                 pathname = optarg;
                 break;
             case 'f':
-                suffix = optarg;
+                file_type = optarg;
                 break;
             case 's':
-                search_string = optarg;
+                pattern = optarg;
                 break;
             case 'l':
                 include_links = 1;
@@ -48,9 +56,9 @@ int main(int argc, char *argv[]){
         }
     }
     
-    printf("finds -p %s -f %s -l %d -s %s\n",pathname,suffix,include_links,search_string);
+    printf("finds -p %s -f %s -l %d -s %s\n",pathname,file_type,include_links,pattern);
     // const char *pathname = argv[1];
     // const char *pattern = argv[2];
-    // myftw(pathname,pattern,myfunc);
+    myftw(pathname,pattern,file_type,myfunc);
     return 0;
 }
