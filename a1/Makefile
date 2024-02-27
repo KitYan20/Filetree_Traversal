@@ -1,6 +1,6 @@
 CC = gcc
 PROGS = finds
-OBJS = directory.o main.o file.o
+OBJS = directory.o main.o 
 %.o:%.c
 	$(CC) -c $< -o $@
 
