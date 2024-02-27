@@ -9,13 +9,13 @@
 
 typedef int Myfunc(const char*,const char*);
 Myfunc myfunc;
-int myftw(const char *, Myfunc *);
-int dopath(Myfunc *);
+int myftw(const char *, const char*, Myfunc *);
+int dopath(Myfunc *, const char*);
 
 char *fullpath;
 size_t pathlen;
 
-int myftw(const char *pathname, Myfunc *func){
+int myftw(const char *pathname, const char *pattern, Myfunc *func){
     pathlen = PATH_MAX + 1;
     fullpath = malloc(pathlen);
     if (pathlen <= strlen(pathname)){
@@ -25,19 +25,17 @@ int myftw(const char *pathname, Myfunc *func){
         }
     }
     strcpy(fullpath,pathname);
-    return dopath(func);
+    return dopath(func,pattern);
 }
 
-int dopath(Myfunc *func){
+int dopath(Myfunc *func, const char *pattern){
     DIR *directory;
     struct dirent *entry;
     int ret,n;
-    
-    if ((ret = func(fullpath,"s")) != 0){
+    if ((ret = func(fullpath,pattern)) != 0){
         return ret;
     }
     n = strlen(fullpath);
-
     if (n + NAME_MAX + 2 > pathlen){
         pathlen *= 2;
         if ((fullpath = realloc(fullpath,pathlen)) == NULL){
@@ -46,29 +44,23 @@ int dopath(Myfunc *func){
     }
     fullpath[n++] = '/';
     fullpath[n] = 0;
-
     if ((directory = opendir(fullpath)) == NULL){
-        return func(fullpath,"s");
+        return func(fullpath,pattern);
     }
     while( (entry = readdir(directory))!= NULL){
             if(strcmp(entry->d_name,".") == 0 || strcmp(entry->d_name,"..") == 0){
                 continue;
             }
             strcpy(&fullpath[n],entry->d_name);
-            if ((ret = dopath(func)) != 0)
-                break;
-            
-    }
-    
-    
+            if ((ret = dopath(func,pattern)) != 0)
+                break;          
+    } 
     fullpath[n-1] = 0;
-    
     if (closedir(directory) < 0){
         printf("can’t close directory %s", fullpath);
     }
     return ret;
 }
-
 int myfunc(const char* pathname, const char *pattern){
     FILE *file = fopen(pathname,"r");
     if (file == NULL){
@@ -82,8 +74,7 @@ int myfunc(const char* pathname, const char *pattern){
         if (strstr(line,pattern) != NULL){
             printf("Line: %s Path: %s",line,pathname); 
             printf("\n");         
-        }       
-        
+        }           
     }
     fclose(file);
     return 0;
