@@ -69,25 +69,37 @@ int myfunc(const char* pathname, const char *pattern,const char *filetype){
     FILE *file = fopen(pathname,"r");
     
     if (file == NULL){
-        fprintf(stderr,"Error opening files either a directory or not a readable file\n");
-        return 0;
+        //fprintf(stderr,"Error opening files either a directory or not a readable file\n");
+        return 0;   
     }
-    if (strcmp(file_extension,filetype) == 0){
-        char line[512];
-        int line_number = 0;    
-        while (fgets(line,sizeof(line),file)){
-            line_number++;
-            if (strstr(line,pattern) != NULL){
-                printf("Line: %s Path: %s",line,pathname); 
-                printf("\n");         
-            }           
+    else{
+        
+        if (filetype == NULL){
+            char line[512];
+            int line_number = 0;    
+            while (fgets(line,sizeof(line),file)){
+                line_number++;
+                if (strstr(line,pattern) != NULL){
+                    printf("Line: %s Path: %s",line,pathname); 
+                    printf("\n");         
+                }           
+            }
+        
         }
-        fclose(file);
-    }else{
-        //printf("No file type available\n");
-        fclose(file);
-        return 0;
+        else if (strcmp(file_extension,filetype) == 0){
+            char line[512];
+            int line_number = 0;    
+            while (fgets(line,sizeof(line),file)){
+                line_number++;
+                if (strstr(line,pattern) != NULL){
+                    printf("Line:%s Path:%s\n",line,pathname); 
+                            
+                }           
+            }
+            
+        }
     }
+    fclose(file);
     
     return 0;
 }

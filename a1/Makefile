@@ -7,4 +7,4 @@ OBJS = directory.o main.o
 finds: $(OBJS)
 	$(CC) $^ -o $@
 clean:
-	rm *.o finds
+	rm *.o finds test/link_test
