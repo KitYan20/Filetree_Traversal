@@ -9,13 +9,13 @@
 
 typedef int Myfunc(const char*,const char*,const char*);
 Myfunc myfunc;
-int myftw(const char *, const char*, const char* ,Myfunc *);
-int dopath(Myfunc *, const char*, const char*);
+int myftw(const char *, const char*, const char* ,int, Myfunc *);
+int dopath(Myfunc *, const char*, const char*,int);
 
 char *fullpath;
 size_t pathlen;
 
-int myftw(const char *pathname, const char *pattern, const char *filetype, Myfunc *func){
+int myftw(const char *pathname, const char *pattern, const char *filetype, int symbolic_link, Myfunc *func){
     pathlen = PATH_MAX + 1;
     fullpath = malloc(pathlen);
     if (pathlen <= strlen(pathname)){
@@ -24,13 +24,15 @@ int myftw(const char *pathname, const char *pattern, const char *filetype, Myfun
             printf("realloc failed");
         }
     }
+    printf("%d\n", symbolic_link);
     strcpy(fullpath,pathname);
-    return dopath(func,pattern,filetype);
+    return dopath(func,pattern,filetype,symbolic_link);
 }
 
-int dopath(Myfunc *func, const char *pattern,const char* filetype){
+int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_link){
     DIR *directory;
     struct dirent *entry;
+    struct stat statbuf;
     int ret,n;
     if ((ret = func(fullpath,pattern,filetype)) != 0){
         return ret;
@@ -52,7 +54,17 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype){
                 continue;
             }
             strcpy(&fullpath[n],entry->d_name);
-            if ((ret = dopath(func,pattern,filetype)) != 0){
+
+            if (lstat(fullpath,&statbuf) == 0){
+                //Check if its not a directory
+                if (S_ISDIR(statbuf.st_mode) == 0){
+                    if (S_ISLNK(statbuf.st_mode) && (symbolic_link == 0)){
+                        printf("It's a symbolic but we're not checking");
+                        continue;
+                    }
+                }
+            }
+            if ((ret = dopath(func,pattern,filetype,symbolic_link)) != 0){
                 break;
             }     
     } 

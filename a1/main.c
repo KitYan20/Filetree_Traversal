@@ -64,6 +64,6 @@ int main(int argc, char *argv[]){
     }
     
     printf("finds -p %s -f %s -l %d -s %s\n",pathname,file_type,include_links,pattern);
-    myftw(pathname,pattern,file_type,myfunc);
+    myftw(pathname,pattern,file_type,include_links,myfunc);
     return 0;
 }
