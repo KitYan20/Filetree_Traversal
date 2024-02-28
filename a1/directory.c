@@ -24,7 +24,7 @@ int myftw(const char *pathname, const char *pattern, const char *filetype, int s
             printf("realloc failed");
         }
     }
-    printf("%d\n", symbolic_link);
+    // printf("%d\n", symbolic_link);
     strcpy(fullpath,pathname);
     return dopath(func,pattern,filetype,symbolic_link);
 }
@@ -59,7 +59,7 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
                 //Check if its not a directory
                 if (S_ISDIR(statbuf.st_mode) == 0){
                     if (S_ISLNK(statbuf.st_mode) && (symbolic_link == 0)){
-                        printf("It's a symbolic but we're not checking");
+                        // printf("It's a symbolic but we're not checking");
                         continue;
                     }
                 }
