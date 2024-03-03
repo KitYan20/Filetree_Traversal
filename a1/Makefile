@@ -14,4 +14,4 @@ finds: $(OBJS)
 my_printf: $(PRINTF)
 	$(CC) ${OPT} ${DEBUG} $^ -o $@
 clean:
-	rm *.o finds test/link_test
+	rm *.o finds test/link_test my_printf
