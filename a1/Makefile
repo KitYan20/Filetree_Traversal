@@ -8,7 +8,7 @@ PRINTF = itoa.o my_printf.o
 	$(CC) -c ${OPT} ${DEBUG} $< -o $@
 .PHONY: all clean
 .SILENT: clean
-all: finds my_printf
+all: finds my_printf 
 finds: $(OBJS)
 	$(CC) ${OPT} ${DEBUG} $^ -o $@
 my_printf: $(PRINTF)
