@@ -11,7 +11,6 @@ typedef int Myfunc(const char*,const char*,const char*);
 Myfunc myfunc;
 int myftw(const char *, const char*, const char* ,int, Myfunc *);
 int dopath(Myfunc *, const char*, const char*,int);
-
 char *fullpath;
 size_t pathlen;
 

@@ -2,7 +2,7 @@ CC = gcc
 DEBUG=-g
 OPT=-O0
 PROGS = finds
-OBJS = directory.o main.o 
+OBJS = directory.o main.o wildcard.o
 PRINTF = itoa.o my_printf.o
 %.o:%.c
 	$(CC) -c ${OPT} ${DEBUG} $< -o $@
