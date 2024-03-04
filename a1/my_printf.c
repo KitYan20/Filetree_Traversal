@@ -9,6 +9,14 @@ void my_printf(char *format, ...){
     int arg_count = 0;
     //Initialize the rbp base void pointer to check for the arguments passed on to the stack
     /*
+    The first 5 arguments will be placed in registers with the
+    arguments getting stored in reverse order with last arguments placed on the registers in this order
+    r9 -> fifth argument 
+    r8 -> fourth argument
+    rcx -> third argument
+    rdx -> second argument
+    rsi -> first argument
+    rdi -> gets the formatted string
     If more than 5 arguments are passed in, the rest of the arguments are passed onto the stack
     */
     void *rbp;

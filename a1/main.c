@@ -70,14 +70,17 @@ int main(int argc, char *argv[]){
     
     // printf("finds -p %s -f %s -l %d -s %s\n",pathname,file_type,include_links,pattern);
     // myftw(pathname,pattern,file_type,include_links,myfunc);
-    wildcard("b","a*b");
-    wildcard("acbbb","a*b");
-    wildcard("abb","a*b");
-    wildcard("a","a*b");
-    wildcard("cbbb","a*b");
-    wildcard("accc","a*b");
-    wildcard("cccb","a*b");
-    wildcard("zzzzz","a*b");
-    // wildcard("greatSentenceaXbcool","a.b");
+    wildcard("caacb","caa*b");
+    wildcard("cbb","caa*b");
+    wildcard("ca","caa*b");
+    wildcard("ab","caa*b");
+    // wildcard("abb","a*bb");
+    // wildcard("a","a*b");
+    // wildcard("cbbb","a*b");
+    // wildcard("accc","a*b");
+    // wildcard("cccb","a*b");
+    // wildcard("zzzzz","a*b");
+    // wildcard("greatSentenceaXbcool","a*b");
+    // wildcard("c","a*b");
     return 0;
 }
