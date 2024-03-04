@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 bool wildcard(const char* str, char* pattern){
+    
+    char ch = *pattern;
     if (strstr(pattern,".") != NULL){
         //Copy the pattern string 
         char pattern_copy[strlen(pattern)+1];
         strcpy(pattern_copy,pattern);
-        printf("%s ",str);
+        //printf("%s ",str);
         //Separate the pattern string into tokens by the "."
         char* token = strtok(pattern_copy,".");
         //Get the token from the left side
@@ -35,7 +38,7 @@ bool wildcard(const char* str, char* pattern){
                 char next_state = str_copy[i];
                 //If the next character is the second token and the second character is also a second token, it will be a match 
                 if (next_state == token4 && str_copy[i+1] == token4){
-                    printf("Pattern matched\n");
+                    //printf("Pattern matched\n");
                     return true;
                     break;
                 //Else case will be if the next character isn't the second token
@@ -48,7 +51,7 @@ bool wildcard(const char* str, char* pattern){
                     while(str_copy[i] != '\0'){
                         //When it finally finds a match of the second token, it will break out of the loop
                         if (str_copy[i] == token4){
-                            printf("Pattern matched\n");
+                            //printf("Pattern matched\n");
                             return true;
                             break;
                             
@@ -67,7 +70,7 @@ bool wildcard(const char* str, char* pattern){
             }
         }
         //Return false if no pattern is found
-        printf("No Pattern Found\n");
+        //printf("No Pattern Found\n");
         return false;
     }else if (strstr(pattern,"*") != NULL) {
         printf("Wildcard with *\n");
@@ -79,6 +82,11 @@ bool wildcard(const char* str, char* pattern){
         
         printf("Wildcard with ()\n");
         return true;
+    }else if (isalnum(ch)){
+        if(strstr(str,pattern) != NULL){
+            return true;
+        }   
+
     }else{
         printf("Unknown delimeter\n");
         

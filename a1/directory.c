@@ -90,7 +90,7 @@ int myfunc(const char* pathname, const char *pattern,const char *filetype){
             int line_number = 0;    
             while (fgets(line,sizeof(line),file)){
                 line_number++;
-                if (strstr(line,pattern) != NULL){
+                if (wildcard(line,(char*)pattern) == 1){
                     printf("Line: %s Path: %s",line,pathname); 
                     printf("\n");         
                 }           
@@ -102,7 +102,7 @@ int myfunc(const char* pathname, const char *pattern,const char *filetype){
             int line_number = 0;    
             while (fgets(line,sizeof(line),file)){
                 line_number++;
-                if (strstr(line,pattern) != NULL){
+                if (wildcard(line,(char*)pattern) == 1){
                     printf("Line:%s Path:%s\n",line,pathname); 
                             
                 }           
