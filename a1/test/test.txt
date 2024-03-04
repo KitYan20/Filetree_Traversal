@@ -7,3 +7,6 @@ ab
 abb
 a9b
 greatSentenceaXbcool
+
+b
+aba
