@@ -70,10 +70,21 @@ int main(int argc, char *argv[]){
     
     // printf("finds -p %s -f %s -l %d -s %s\n",pathname,file_type,include_links,pattern);
     // myftw(pathname,pattern,file_type,include_links,myfunc);
-    wildcard("caacb","caa*b");
-    wildcard("cbb","caa*b");
-    wildcard("ca","caa*b");
-    wildcard("ab","caa*b");
+    // wildcard("caacb","caa*b");
+    // wildcard("cbb","caa*b");
+    // wildcard("ca","caa*b");
+    // wildcard("ab","caa*b");
+
+    wildcard("acaab","aca?b");
+    wildcard("acab","aca?b");
+    wildcard("aab","aca?b");
+    wildcard("accacabc","aca?b");
+    wildcard("accacbc","aca?b");
+    wildcard("accacaabc","aca?b");
+    wildcard("ab","a?b");
+    wildcard("aab","a?b");
+    wildcard("b","a?b");
+
     // wildcard("abb","a*bb");
     // wildcard("a","a*b");
     // wildcard("cbbb","a*b");

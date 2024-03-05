@@ -173,20 +173,50 @@ bool wildcard(const char* str, char* pattern){
     }else if (strstr(pattern,"?") != NULL){
         //Separate the pattern string into tokens by the "."
         char* token = strtok(pattern_copy,"?");
-        //Get the token from the left side
+        //Get the token from the left side aka leftside of the wildcard
         char* token1 = token;
-        //Get the token from the right side
+        //Get the token from the right side aka rightside of the wildcard
         char *token2;
         //Standard function to get the token
         while (token != NULL) {
             token2 = token;
-            token = strtok(NULL, "*");
+            token = strtok(NULL, "?");
         }
-        //Dereference the first and second token into chars because 'C' 
-        char token3 = *token1;
-        char token4 = *token2;
+        char str1[256];
+        //Get the last n-1 characters
+        int len = strlen(token1);
+        char prev_char[2];
+        prev_char[0] = token1[len-1];
+        prev_char[1] = '\0';
+
+        if (len > 1){
+            strncpy(str1,token1, len-1);
+            str1[len - 1] = '\0';
+            
+        }else{
+            strcpy(str1,token1);
+            str1[strlen(str1)] = '\0';
+        }
+        printf("%s %s %s %s\n",str1, prev_char , token2, str_copy);
         printf("Wildcard with ?\n");
-        return true;
+        if (strlen(str_copy) == 1  && strcmp(str_copy,token2) == 0){
+            printf("Pattern Found with single charater string for %s with %s pattern\n", str_copy, pattern);
+            return true;
+        }
+        //Now check if anything else before the previous character for pattern matching exist
+        else if (strstr(str_copy,str1) != NULL){
+            int i = 0;
+            while(str_copy[i] != '\0'){
+                printf("%c\n",str_copy[i]);
+                i++;
+            }
+
+        }else{
+            printf("No Pattern Found\n");
+        }
+        
+        return false;
+
     }else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){
         
         printf("Wildcard with ()\n");
