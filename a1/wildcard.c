@@ -182,39 +182,66 @@ bool wildcard(const char* str, char* pattern){
             token2 = token;
             token = strtok(NULL, "?");
         }
-        char str1[256];
-        //Get the last n-1 characters
-        int len = strlen(token1);
-        char prev_char[2];
-        prev_char[0] = token1[len-1];
-        prev_char[1] = '\0';
-
-        if (len > 1){
-            strncpy(str1,token1, len-1);
-            str1[len - 1] = '\0';
-            
-        }else{
-            strcpy(str1,token1);
-            str1[strlen(str1)] = '\0';
-        }
-        printf("%s %s %s %s\n",str1, prev_char , token2, str_copy);
-        printf("Wildcard with ?\n");
-        if (strlen(str_copy) == 1  && strcmp(str_copy,token2) == 0){
-            printf("Pattern Found with single charater string for %s with %s pattern\n", str_copy, pattern);
-            return true;
-        }
-        //Now check if anything else before the previous character for pattern matching exist
-        else if (strstr(str_copy,str1) != NULL){
-            int i = 0;
-            while(str_copy[i] != '\0'){
-                printf("%c\n",str_copy[i]);
-                i++;
-            }
-
-        }else{
-            printf("No Pattern Found\n");
-        }
+        int len_token1 = strlen(token1);
+        int len_token2 = strlen(token2);
+        int i = 0;
+        //printf("%s %d %s %d %s\n",token1,len_token1,token2,len_token2, str_copy);
         
+        /*Accounts for the case of the wildcard pattern have only one character before the wildcard and after the wildcard "?"
+         *Looking at the "?" wildcard, as long as there's a instance of the character after the "?" in the string
+         *And the preceding the character is only of length one, you just need to check if the character after the "?"
+         *Exist in the string
+        */
+        if (strlen(token1) == 1 && strlen(token2) == 1 && strstr(str_copy,token2) != NULL){
+            //printf("Pattern Matched\n");
+            return true;
+        }//Check if both the preceding string and string before and after the wildcard exist in the string
+        else if(strstr(str_copy,token1) != NULL && strstr(str_copy,token2) != NULL){
+            while(str_copy[i] != '\0'){
+                char *temp = (char*)malloc(len_token1+1);
+                if (temp == NULL){
+                    //printf("Memory Allocation failed\n");
+                    exit(EXIT_FAILURE);
+                }
+                int j = i;
+                int k = 0;
+                while(str_copy[j] != '\0' && k < len_token1){
+                    temp[k] = str_copy[j];
+                    j++;
+                    k++;
+                }
+                temp[k] = '\0';
+                if (strlen(temp) < len_token1){
+                    //printf("No pattern found");
+                    return false;
+                    
+                }
+                char *next_char =  (char*)malloc(len_token2+1);
+                if (next_char == NULL){
+                    //printf("Memory Allocation failed\n");
+                    exit(EXIT_FAILURE);
+                }
+                //Reassign j to be the previous character before adding length of n substring
+                j = i;
+                int l = 0;
+                while(l < len_token2){
+                    next_char[l] = str_copy[j+strlen(token1)];
+                    j++;
+                    l++;
+                }
+                next_char[l] = '\0';
+                //printf("%s %s\n",temp,next_char);
+                if (strcmp(token1,temp) == 0 && strcmp(token2,next_char) == 0){
+                    printf("Pattern Found %s %s with string %s\n",temp,next_char,str_copy);
+                    return true;    
+                }
+                free(next_char);
+                free(temp);
+                i++;
+           
+            }
+        }
+        printf("No Pattern Found with %s\n",str_copy);
         return false;
 
     }else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){

@@ -75,15 +75,19 @@ int main(int argc, char *argv[]){
     // wildcard("ca","caa*b");
     // wildcard("ab","caa*b");
 
-    wildcard("acaab","aca?b");
-    wildcard("acab","aca?b");
-    wildcard("aab","aca?b");
-    wildcard("accacabc","aca?b");
-    wildcard("accacbc","aca?b");
-    wildcard("accacaabc","aca?b");
-    wildcard("ab","a?b");
-    wildcard("aab","a?b");
-    wildcard("b","a?b");
+    wildcard("acacaacbabcaac","caac?b");
+    wildcard("acacaacabcaacb","caac?b");
+    wildcard("ab","aaaaa?b");
+    // wildcard("ab","c?b");
+    // wildcard("b","c?b");
+    // wildcard("acab","aca?b");
+    // wildcard("aab","aca?b");
+    // wildcard("accacabc","aca?b");
+    // wildcard("accacbc","aca?b");
+    // wildcard("accacaabc","aca?b");
+    // wildcard("ab","a?b");
+    // wildcard("aab","a?b");
+    // wildcard("b","a?b");
 
     // wildcard("abb","a*bb");
     // wildcard("a","a*b");
