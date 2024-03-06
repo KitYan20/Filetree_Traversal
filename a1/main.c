@@ -70,15 +70,29 @@ int main(int argc, char *argv[]){
     
     // printf("finds -p %s -f %s -l %d -s %s\n",pathname,file_type,include_links,pattern);
     // myftw(pathname,pattern,file_type,include_links,myfunc);
+
     // wildcard("caacb","caa*b");
     // wildcard("cbb","caa*b");
     // wildcard("ca","caa*b");
     // wildcard("ab","caa*b");
+    // wildcard("caab","caa*b");
+    // wildcard("caaaccaab","caa*b");
+    wildcard("cdb","a*b");
 
-    wildcard("acacaacbabcaac","caac?b");
-    wildcard("acacaacabcaacb","caac?b");
-    wildcard("ab","aaaaa?b");
-    // wildcard("ab","c?b");
+    
+    // wildcard("aaaccaaab","aaac*b");
+    // wildcard("aaab","aaac*b");
+    // wildcard("aaaccaaab","aaac*b");
+    // wildcard("aaaccaaacccb","aaac*b");
+    // wildcard("aaaccaaaccc","aaac*b");
+    // wildcard("aaab","aaac*b");
+    // wildcard("aaaccdaaacb","aaac*b");
+    // wildcard("caaab","a*b");
+    
+    // wildcard("acacaacbabcaac","caac?b");
+    // wildcard("acacaacabcaacb","caac?bc");
+    // wildcard("ab","aaaaa?b");
+    // wildcard("a","c?b");
     // wildcard("b","c?b");
     // wildcard("acab","aca?b");
     // wildcard("aab","aca?b");
