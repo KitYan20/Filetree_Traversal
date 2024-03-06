@@ -72,89 +72,140 @@ bool wildcard(const char* str, char* pattern){
         //Return false if no pattern is found
         //printf("No Pattern Found\n");
         return false;
-    }else if (strstr(pattern,"*") != NULL) {
+    }
+    else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){ //Parentheses
+        
+        if (strstr(pattern,"*") != NULL){
+            printf("Wildcard with () and *\n");
+        }
+        else if (strstr(pattern,"?") != NULL)
+        {
+            printf("Wildcard with () and ?\n");
+        }else{
+            printf("Unknown delimeter\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("No Pattern Found\n");
+        return false;
+    }
+    else if (strstr(pattern,"*") != NULL) {//Checks for the "*" wildcard
         //Separate the pattern string into tokens by the "."
         char* token = strtok(pattern_copy,"*");
-        //Get the token from the left side
-        char* token1 = token;
-        //Get the token from the right side
+        //Get the token from the left side of the wildcard
+        char* token1 = token; 
+        //Get the token from the right side of the card
         char *token2;
-        //Standard function to get the token
+        //Standard function to get the tokens from each side
         while (token != NULL) {
             token2 = token;
             token = strtok(NULL, "*");
         }
         //Get the last n-1 characters
+        //str1 will get the substring of character excluding the previous 
+        //character of the wildcard -> eg aba*b 
+        //                                / \
+        //                               ab  a
         char str1[256];
+        //str2 will get the character of the single character before the wildcard
         char str2[2];
         str2[0] = token1[strlen(token1)-1];
         str2[1] = '\0';
+        //if the string on the right side has only more than one character,
+        //separate n - 1 characters from the right substring
         if (strlen(token1) > 1){
             strncpy(str1,token1, strlen(token1)-1);
             str1[strlen(token1) - 1] = '\0';
-            
+        //However if its only character on the left, store str1 with that one character
         }else{
             strcpy(str1,token1);
             str1[strlen(str1)] = '\0';
         }
-        //printf("%s %s %s\n",str1,str2,token2);
+        printf("%s %s %s\n",str1,str2,token2);
         int i = 0;
-
+        //get the length of each substring from each side of the wildcard excluding the last character in the left substring
         int len_token1 = strlen(str1);
         int len_token2 = strlen(token2);
-        //Edge case to account for just the character b in a string
+        //Case 1 to account for just the character b in a string
         //IF the wildcard pattern previous and next character is length 1, just need to check if the character b exist in the string
         if (strlen(token1) == 1 && strlen(token2) == 1 && strstr(str_copy,token2) != NULL){
             printf("Pattern Matched\n");
             return true;
         }
+        //Case 2 to account if str1 (left side of the wildcard) or token2 (right side of the wildcard)
+        //exist in the string but need to still iterate through it to see if its in sequence for pattern matching
         else if(strstr(str_copy,str1) != NULL || strstr(str_copy,token2) != NULL){
+            //Iterate through the string character by character
             while(str_copy[i] != '\0'){
+                //use malloc to allocate string storage for the length of left side substring
                 char *temp = (char*)malloc(len_token1+1);
+                //Initialize a nested pointer to be used for later when we iterate through the string
+                //multiple times
                 int j = i;
+                //Intialize another counter to store our left side substring with k characters
                 int k = 0;
                 if (temp == NULL){
                     //printf("Memory Allocation failed\n");
                     exit(EXIT_FAILURE);
                 }
+                //This is where we essentially do sliding window to get a substring of k characters from the main string
                 while(str_copy[j] != '\0' && k < len_token1){
                     temp[k] = str_copy[j];
                     j++;
                     k++;
                 }
+                //End the string with a null terminated character
                 temp[k] = '\0';
                 // printf("Temp %s\n",temp);
+                //This essentially checks the whole string and see if the length of the 
+                //temporary string is less than the left side of the wildcard
+                //This usually happens when it reaches to a state where it's at the end of the string and 
+                //still hasn't found a match
                 if (strlen(temp) < len_token1){
                     // printf("Temp %s\n",temp);
                     printf("No pattern found\n");
                     return false;
                 }
+                //Reset j back to wherever i was pointing to in the string
                 j = i;
                 int l = 0;
+                //if the temporary string finds a match with the left side substring
+                //we now check to see if there are occurences of the next character 
+                //or occurences of the rightside string and if it does find it, then its a match
                 if (strcmp(str1,temp) == 0){
+                    //Allocate enough memory for one character string
                     char *next_char = (char*)malloc(strlen(str2)+1);
                     if (next_char == NULL){
                         //printf("Memory Allocation failed\n");
                         exit(EXIT_FAILURE);
                     }
+                    //Fill in the next character string with chars
                     while(l < len_token2){
                             next_char[l] = str_copy[j+len_token1];
                             j++;
                             l++;
                     }
+                    //end the next character with a null terminated character
                     next_char[l] = '\0';
                     //printf("hi %s %s",next_char,temp);
+                    //If the next character does indeed match with the rightside, then we can stop iterating through
+                    //As it found a pattern
                     if (strcmp(token2,next_char) == 0){
                             // printf("%s\n",next_char);
                             printf("Pattern Matched\n");
                             free(temp);
                             free(next_char);
                             return true;
+                    //Otherwise, we check to see if the next character matches with the same instance of
+                    //the single character before the wildcard
                     }else if (strcmp(str2,next_char) == 0){
+                        //Allocte enough memory for the next char
                         char *next_char2 = (char*)malloc(strlen(str2)+1);
+                        //Fill in the character string with the next character
                         next_char2[0] = str_copy[j+strlen(str1)];
                         next_char2[1] = '\0';
                         //printf("hi %s %s",next_char2,temp);
+                        //Now we check again to see if it matches with the rightside of the wildcard
+                        //If it does, make sure to free up memory from the heap and return a match
                         if (strcmp(token2,next_char2) == 0){
                                 printf("Pattern Matched\n");
                                 free(temp);
@@ -162,7 +213,9 @@ bool wildcard(const char* str, char* pattern){
                                 free(next_char2);
                                 return true;
                         }else{
-                            
+                        //If that is not the case, we need to keep iterating through the string
+                        //And check continuosly to see if the next character matches the previous character
+                        //Essentially checking the final state here as well 
                             while(strcmp(str2,next_char2) == 0){
                                 next_char2[0] = str_copy[j+strlen(str1)];
                                 next_char2[1] = '\0';
@@ -177,28 +230,29 @@ bool wildcard(const char* str, char* pattern){
                                     j++;
                                 }
                             }
-
-                        }
-                        
-                    }
+                        }            
+                    }          
                     else{
                         free(next_char);
                     }              
                 }
+                //Else case is we just reset the string back to where i was in the string
+                //and make sure to free memory from the heap
                 free(temp);
                 i++;
             }
-              
+        //If it satisfies none of the cases, we just return false meaning no pattern was found
         }else{
             printf("No Pattern found\n");
             return false;
         }
         // //strncmp
         // //strstr
+        //Main case of not finding other cases that wasn't accounted for
         printf("No pattern found\n");
         return false;
         
-    }else if (strstr(pattern,"?") != NULL){
+    }else if (strstr(pattern,"?") != NULL){ //Checks for the "?" wildcard
         //Separate the pattern string into tokens by the "."
         char* token = strtok(pattern_copy,"?");
         //Get the token from the left side aka leftside of the wildcard
@@ -210,6 +264,7 @@ bool wildcard(const char* str, char* pattern){
             token2 = token;
             token = strtok(NULL, "?");
         }
+        //Get the length of both side of the wildcard string
         int len_token1 = strlen(token1);
         int len_token2 = strlen(token2);
         int i = 0;
@@ -225,21 +280,30 @@ bool wildcard(const char* str, char* pattern){
             return true;
         }//Check if both the preceding string and string before and after the wildcard exist in the string
         //Does not check if its in order of the pattern
+        //Cases where the lenght of the leftside string of the wildcard is greater than 1
         else if(strstr(str_copy,token1) != NULL && strstr(str_copy,token2) != NULL){
+            //Iterate through the whole string character by character
             while(str_copy[i] != '\0'){
+                //Allocate enough memory on the heap for one character string
                 char *temp = (char*)malloc(len_token1+1);
                 if (temp == NULL){
                     //printf("Memory Allocation failed\n");
                     exit(EXIT_FAILURE);
                 }
+                //Initialize a pointer j to be a nested pointer when iterating through the string
+                //To perform other conditional checks
                 int j = i;
                 int k = 0;
+                //Fill in the temporary substring of the string until its the same length of the left side substring
+                //This will change throughout iterations of the string
                 while(str_copy[j] != '\0' && k < len_token1){
                     temp[k] = str_copy[j];
                     j++;
                     k++;
                 }
+                //End the temporary substring with a null terminated character
                 temp[k] = '\0';
+                //Same reason from *
                 if (strlen(temp) < len_token1){
                     //printf("No pattern found");
                     return false;
@@ -250,33 +314,37 @@ bool wildcard(const char* str, char* pattern){
                     //printf("Memory Allocation failed\n");
                     exit(EXIT_FAILURE);
                 }
-                //Reassign j to be the previous character before adding length of n substring
+                //Reassign j to be the previous character before adding length of right side of the wildcard substring
                 j = i;
                 int l = 0;
+                //Getting the next character in the string
                 while(l < len_token2){
                     next_char[l] = str_copy[j+strlen(token1)];
                     j++;
                     l++;
                 }
+                //End the string with a null terminated character
                 next_char[l] = '\0';
                 //printf("%s %s\n",temp,next_char);
+                //Check to see if the leftside substring and next character both match the pattern of the wildcard string
+                //Make sure to free the memory before exiting the program
                 if (strcmp(token1,temp) == 0 && strcmp(token2,next_char) == 0){
                     printf("Pattern Found %s %s with string %s\n",temp,next_char,str_copy);
+                    free(next_char);
+                    free(temp);
                     return true;    
                 }
+                //Continue iterating the string and free the memory for both the strings
                 free(next_char);
                 free(temp);
                 i++;
            
             }
         }
+        //No pattern found if the whole string has been iterated and none of the conditions are satisfied
         printf("No Pattern Found with %s\n",str_copy);
         return false;
 
-    }else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){
-        
-        printf("Wildcard with ()\n");
-        return true;
     }else if (isalnum(ch)){
         if(strstr(str,pattern) != NULL){
             return true;
@@ -284,7 +352,6 @@ bool wildcard(const char* str, char* pattern){
 
     }else{
         printf("Unknown delimeter\n");
-        
-        return false;
+        exit(EXIT_FAILURE);
     }
 }
