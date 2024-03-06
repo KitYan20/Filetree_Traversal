@@ -74,16 +74,138 @@ bool wildcard(const char* str, char* pattern){
         return false;
     }
     else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){ //Parentheses
-        
-        if (strstr(pattern,"*") != NULL){
-            printf("Wildcard with () and *\n");
+        printf("%s\n",pattern);
+        int count = 0;
+        for (int i = 0; i < strlen(pattern); i++){
+            // printf("%c\n",pattern_copy[i]);
+            if (pattern_copy[i] == '('){
+                count++;
+            }
+            else if (pattern_copy[i] == ')' && count == 1){
+                count = 0;
+                //printf("closing parenthesis found\n");
+            }else if (pattern_copy[i] == ')' && count > 1){
+                //printf("Invalid parenthesis\n");
+                return false;
+            }
         }
-        else if (strstr(pattern,"?") != NULL)
-        {
+        if (strstr(pattern,"*") != NULL && strstr(pattern,"?") != NULL){
+            printf("Wildcard with () and * and ?\n");
+        }
+        else if (strstr(pattern,"?") != NULL){
+            char literal_start[256];
+            char literal_end[256];
             printf("Wildcard with () and ?\n");
+            int i = 0;
+
+            while(pattern_copy[i] != '(' && pattern_copy[i] != '\0'){
+                literal_start[i] = pattern_copy[i];
+                
+                i++;
+            }
+            literal_start[i] = '\0';
+            printf("%s",literal_start);
+        }else if (strstr(pattern,"*") != NULL){
+            char literal_start[256];
+            char literal_end[256];
+            char substring[256];
+            //printf("Wildcard with () and *\n");
+            int i = 0;
+            //Extracting characters before (
+            while(pattern_copy[i] != '(' && pattern_copy[i] != '\0'){
+                literal_start[i] = pattern_copy[i];
+                i++;
+            }
+            literal_start[i] = '\0';
+            
+            //Extracting substrings within ()
+            int j = 0;
+            if (pattern_copy[i] == '('){
+                i++;
+                while(pattern_copy[i] != ')' && pattern_copy[i] != '\0'){
+                    substring[j] = pattern_copy[i];
+                    i++;
+                    j++;
+                }
+            }
+            substring[j] = '\0';
+
+            int k = 0;
+            if (pattern_copy[i] == ')'){
+                i++;
+                if (pattern_copy[i] == '*'){
+                    i++;
+                }
+                while(pattern_copy[i] != '\0'){
+                    literal_end[k] = pattern_copy[i];
+                    i++;
+                    k++;
+                }
+            }
+            literal_end[k] = '\0';
+            i = 0;
+            j = 0;
+            k = 0;
+            printf("%s %s %s %d %d %d\n",literal_start ,substring,literal_end,i,j,k);
+
+            while(str_copy[i] != '\0'){
+                char current_char[2];
+                memset(current_char,0,sizeof(current_char));
+                current_char[0] =str_copy[i];
+                current_char[1] = '\0';
+                //No character before the parenthesis
+                // if (strcmp(" ",literal_start)){
+                    
+                // }
+                
+                if (strcmp(literal_start,current_char) == 0 || strcmp(" ",literal_start)){
+                    j = i;
+                    j++;
+                    char group_char[sizeof(substring)];
+                    memset(group_char,0,sizeof(group_char));
+                    
+                    while(k < strlen(substring)){
+                        group_char[k] = str_copy[j];
+                        k++;
+                        j++;
+
+                    }
+                    group_char[k] = '\0';
+                    k = 0;
+                    //printf("%s",group_char);
+                    if (strcmp(substring,group_char) == 0){
+                        if (strcmp(" ",literal_end) == 0){
+                            printf("Pattern found\n");
+                            return true;
+                        }else {
+                            char next_char[sizeof(literal_end)];
+                            memset(next_char,0,sizeof(next_char));
+                            while(k < strlen(literal_end)){
+                                next_char[k] = str_copy[j];
+                                k++;
+                                j++;
+                            }
+                            
+                            next_char[k] = '\0';
+                            k = 0;
+                            if (strcmp(literal_end,next_char) == 0){
+                                printf("Pattern found\n for %s %s", group_char,next_char);
+                                return true;
+                            }else{
+                                i++;
+                            }
+                        }
+                    }else{
+                        i++;
+                    }
+                    
+                }else{
+                    i++;
+                }    
+            }
+            
         }else{
             printf("Unknown delimeter\n");
-            exit(EXIT_FAILURE);
         }
         printf("No Pattern Found\n");
         return false;

@@ -77,7 +77,7 @@ int main(int argc, char *argv[]){
     // wildcard("ab","caa*b");
     // wildcard("caab","caa*b");
     // wildcard("caaaccaab","caa*b");
-    wildcard("aaaa","a?");
+    //wildcard("aaaa","a?");
 
     
     // wildcard("aaaccaaab","aaac*b");
@@ -103,7 +103,10 @@ int main(int argc, char *argv[]){
     // wildcard("aab","a?b");
     // wildcard("b","a?b");
 
-    wildcard("ab","a(bc)*");
+    // wildcard("ab","ab(cd)*d(ef)?");
+    wildcard("aabcd","(abc)*d");
+    // wildcard("abc","a(bc)*");
+    // wildcard("abcbc","ab(c)*");
 
     // wildcard("abb","a*bb");
     // wildcard("a","a*b");
