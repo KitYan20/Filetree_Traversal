@@ -60,7 +60,7 @@ bool wildcard(const char* str, char* pattern){
     }
     //Checks for parenthesis in the wilcard string
     else if ((strstr(pattern,"(") != NULL) && (strstr(pattern,")")) != NULL){ //Parentheses
-        printf("%s\n",pattern);
+        //printf("%s\n",pattern);
         int count = 0;
         //Condition to check for parentheis opened before it has been closed
         for (int i = 0; i < strlen(pattern); i++){
@@ -273,10 +273,10 @@ bool wildcard(const char* str, char* pattern){
                 }    
             } 
         }else{
-            printf("Unknown delimeter\n");
+            //printf("Unknown delimeter\n");
             exit(EXIT_FAILURE);
         }
-        printf("No Pattern Found\n");
+        //printf("No Pattern Found\n");
         return false;
     }
     else if (strstr(pattern,"*") != NULL) {//Checks for the "*" wildcard
@@ -303,7 +303,7 @@ bool wildcard(const char* str, char* pattern){
             strcpy(str1,token1); //Make a copy of the string
             str1[strlen(str1)] = '\0'; //End it with a Null character
         }
-        printf("%s %s %s\n",str1,str2,token2);
+        //printf("%s %s %s\n",str1,str2,token2);
         int i = 0;
         int len_token1 = strlen(str1); //get the length of each substring from each side of the wildcard excluding the last character in the left substring
         int len_token2 = strlen(token2);
@@ -338,7 +338,7 @@ bool wildcard(const char* str, char* pattern){
                 //This usually happens when it reaches to a state where it's at the end of the string and still hasn't found a match
                 if (strlen(temp) < len_token1){
                     // printf("Temp %s\n",temp);
-                    printf("No pattern found\n");
+                    //printf("No pattern found\n");
                     return false;
                 }
                 j = i; //Reset j back to wherever i was pointing to in the string
@@ -380,9 +380,9 @@ bool wildcard(const char* str, char* pattern){
                             while(strcmp(str2,next_char2) == 0){
                                 next_char2[0] = str_copy[j+strlen(str1)];
                                 next_char2[1] = '\0';
-                                printf("%s",next_char2);
+                                //printf("%s",next_char2);
                                 if (strcmp(token2,next_char2) == 0){
-                                    printf("Pattern Matched\n");
+                                    //printf("Pattern Matched\n");
                                     free(temp);
                                     free(next_char);
                                     free(next_char2);
@@ -426,7 +426,7 @@ bool wildcard(const char* str, char* pattern){
          *Exist in the string
         */
         if (strlen(token1) == 1 && strlen(token2) == 1 && strstr(str_copy,token2) != NULL){
-            printf("Pattern Matched\n");
+            //printf("Pattern Matched\n");
             return true;
         }//Check if both the preceding string and string before and after the wildcard exist in the string but does not check if its in order of the pattern
         //Cases where the length of the leftside string of the wildcard is greater than 1
@@ -468,7 +468,7 @@ bool wildcard(const char* str, char* pattern){
                 next_char[l] = '\0';//End the string with a null terminated character
                 //printf("%s %s\n",temp,next_char);
                 if (strcmp(token1,temp) == 0 && strcmp(token2,next_char) == 0){//Check to see if the leftside substring and next character both match the pattern of the wildcard string
-                    printf("Pattern Found %s %s with string %s\n",temp,next_char,str_copy);
+                    //printf("Pattern Found %s %s with string %s\n",temp,next_char,str_copy);
                     free(next_char);//Make sure to free the memory before exiting the program
                     free(temp);
                     return true;    
@@ -479,15 +479,12 @@ bool wildcard(const char* str, char* pattern){
             }
         }
         //No pattern found if the whole string has been iterated and none of the conditions are satisfied
-        printf("No Pattern Found with %s\n",str_copy);
+        //printf("No Pattern Found with %s\n",str_copy);
         return false;
 
-    }else if (isalnum(ch)){//Checks for cases where it's just alphanumerical characters 
+    }else {//Checks for cases where it's just alphanumerical characters 
         if(strstr(str,pattern) != NULL){
             return true;
         }   
-    }else{
-        printf("Unknown delimeter\n");
-        exit(EXIT_FAILURE);
     }
 }
