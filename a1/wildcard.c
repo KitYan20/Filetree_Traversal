@@ -482,7 +482,7 @@ bool wildcard(const char* str, char* pattern){
         printf("No Pattern Found with %s\n",str_copy);
         return false;
 
-    }else if (isalnum(ch)){//Checks for cases where it's just alphanumerical characters
+    }else if (isalnum(ch)){//Checks for cases where it's just alphanumerical characters 
         if(strstr(str,pattern) != NULL){
             return true;
         }   
