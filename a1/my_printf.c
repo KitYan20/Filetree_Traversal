@@ -181,11 +181,11 @@ void my_printf(char *format, ...){
 }
 
 int main(int argc, char *argv[]){
-    my_printf("%s %d\n", "hello world",8);
-    my_printf("Hello %s %c %d %u %x %s %c %d %x\n","CS410",'R', 8 , 12, 30, "CS210",'h',9,10);
-    printf("Hello %s %c %d %u %x %s %c %d\n","CS410",'R', 8 , 12, 30, "CS210",'h',9);
-    my_printf("Hello %c %c\n", 'c','c');
-    my_printf("%s %c %d %u %x %d %d\n","hello", 'c', 8 , 12345, 15,20,25);
+    // my_printf("%s %d\n", "hello world",8);
+    // my_printf("Hello %s %c %d %u %x %s %c %d %x\n","CS410",'R', 8 , 12, 30, "CS210",'h',9,10);
+    // printf("Hello %s %c %d %u %x %s %c %d\n","CS410",'R', 8 , 12, 30, "CS210",'h',9);
+    // my_printf("Hello %c %c\n", 'c','c');
+    // my_printf("%s %c %d %u %x %d %d\n","hello", 'c', 8 , 12345, 15,20,25);
     return 0;
     
 }
