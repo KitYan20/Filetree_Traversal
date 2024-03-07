@@ -61,6 +61,11 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
                         // printf("It's a symbolic but we're not checking");
                         continue;
                     }
+                }else if (S_ISDIR(statbuf.st_mode) == 1){
+                    if (S_ISLNK(statbuf.st_mode) && (symbolic_link == 0)){
+                        // printf("It's a symbolic but we're not checking");
+                        continue;
+                    }
                 }
             }
             if ((ret = dopath(func,pattern,filetype,symbolic_link)) != 0){
