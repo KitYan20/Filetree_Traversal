@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
                     fprintf(stderr,"Option -%c requires file type.\n",optopt);
                     return 1;
                 }else{
-                    fprintf (stderr,"Unknown option character `\\x%x'.\n",optopt);
+                    fprintf (stderr,"Unknown option character.\n");
                     return 1;
                 }
             default:

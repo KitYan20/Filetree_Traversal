@@ -48,6 +48,12 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
             printf("realloc failed\n");
         }
     }
+    int i = 0;
+    long i_node;
+    int found = 0;
+    stat(fullpath,&statbuf);
+    inode_array[0] = (long)statbuf.st_ino;
+    i++;
     //Do a slash after the path to get ready to append the next file or directory
     fullpath[n++] = '/';
     //End it with a 0 to indicate the end of the path
@@ -56,9 +62,7 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
     if ((directory = opendir(fullpath)) == NULL){
         return func(fullpath,pattern,filetype);
     }
-    int i = 0;
-    long i_node;
-    int found = 0;
+    
     //Main function to do file tree traversal 
     while((entry = readdir(directory))!= NULL){
             //Do not include . or .. for our file traversal
@@ -67,12 +71,13 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
             }
             //Append the current file/directory name to our path
             strcpy(&fullpath[n],entry->d_name);
-            //stat our full path to get information on the file/directory eg inodes
-            stat(fullpath,&statbuf);   
-            // printf("Inode iteration inode[%d]: %ld %s\n",i,inode_array[i],fullpath);  
+            // //Get the inode of the current file type
+            //stat our full path to get meta data information on the current file/directory eg inodes
+            stat(fullpath,&statbuf);       
+            inode_array[i] = (long)statbuf.st_ino;
+            i++;
+            //printf("Inode iteration inode[%d]: %ld %s\n",i,inode_array[i],fullpath);  
             if (lstat(fullpath,&statbuf) == 0){
-                //Get the inode of the current file type
-                inode_array[i++] = (long)statbuf.st_ino;
                 //Check if its not a directory so it has to be a regular file
                 if (S_ISDIR(statbuf.st_mode) == 0){
                     //Checks if its a symbolic link file but we're not checking it depending is -l flag is specified
@@ -89,12 +94,13 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
                             //printf("I-node %ld %ld\n",inode_array[j],(long)statbuf.st_ino);
                             //If the i-nodes been visited, we shouldn't visit again resulting in a infinite loop
                             if (inode_array[j] == (long)statbuf.st_ino){
-                                    found = 1;
-                                    break;  
+                                    found = 1;                 
+                            }else{
+                                printf("Inode iteration inode[%d]: %ld %s\n",i,inode_array[j],fullpath);  
                             }
                         }
                         if (found == 1){
-                            ret = 0;
+                            ret = 1;
                             if ((ret = dopath(func,pattern,filetype,symbolic_link)) != 0){
                                 break;
                             } 
