@@ -1,5 +1,5 @@
 #include <stdio.h>
 
 int main(){
-    printf("Cs410 is hards\n");
+    printf("Cs410 is hard\n");
 }

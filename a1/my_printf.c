@@ -170,13 +170,6 @@ void my_printf(char *format, ...){
         format++;
         
     }  
-    //This is just to print back out the number of format string tags passed in 
-    //Matching with the number of arguments passed in 
-    char buffer[256];
-    itoa(buffer,'d',arg_count);
-    char argtotal[] = "The number of arguments passed is ";
-    strcat(argtotal,buffer);
-    printf("%s\n",argtotal);
        
 }
 
