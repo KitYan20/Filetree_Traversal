@@ -96,7 +96,8 @@ int dopath(Myfunc *func, const char *pattern,const char* filetype,int symbolic_l
                             if (inode_array[j] == (long)statbuf.st_ino){
                                     found = 1;                 
                             }else{
-                                printf("Inode iteration inode[%d]: %ld %s\n",i,inode_array[j],fullpath);  
+                                // printf("Inode iteration inode[%d]: %ld %s\n",i,inode_array[j],fullpath);  
+                                continue;
                             }
                         }
                         if (found == 1){
