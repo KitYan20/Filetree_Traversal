@@ -1,4 +1,4 @@
-# CS410_hw1
+# CS410_a1
 
 For Assignment 1, this PSET was quite challenging. I managed to get most of the functionalities working for finds and creating my own printf. In my code, you will find C files, directory.c, main.c which are main files to compile for the "finds" ELF file. Along with the necessary header files to make sure it has references to functions when it's linked together during linking. The Makefile is created to automate the process of compiling C files to object files and linking the necessary object files to the corresponsing executable file. my_printf.c and itoa.c is used to compile my own printf to work.
 
